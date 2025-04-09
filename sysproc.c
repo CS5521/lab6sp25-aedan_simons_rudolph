@@ -7,7 +7,7 @@
 #include "mmu.h"
 #include "proc.h"
 
-static int forkCount;
+static int forkCount = 0;
 
 int
 sys_fork(void)
@@ -100,11 +100,17 @@ sys_hw(void)
   return 0;
 }
 
-int 
+int
 sys_fkc(void)
 {
-  int val;
-  if (argint(0, &val) < 0) return -1;
-  if (val == 0) forkCount = 0;
+  int val = 1;
+  if (argint(0, &val) < 0) {
+    forkCount = 0;
+    return 0;
+  }
+  if (val == 0) {
+    forkCount = 0;
+    return 0;
+  } 
   return forkCount;
 }
